@@ -1,0 +1,171 @@
+/* src/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/react-datepicker/4.1.1/react-datepicker.min.css');
+
+
+
+:root {
+  --primary-color: #1E1E2F;
+  --secondary-color: #282A36;
+  --accent-color: #6272A4;
+  --background-color: #121212;
+  --text-color: #f8f8f2;
+  --card-background: #1E1E2F;
+}
+
+[data-theme='light'] {
+  --primary-color: #4CAF50;
+  --secondary-color: #ffffff;
+  --accent-color: #FFC107;
+  --background-color: #f4f4f9;
+  --text-color: #000000;
+  --card-background: #ffffff;
+}
+
+body {
+  font-family: "Share Tech Mono", monospace;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 1rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+nav ul li {
+  margin: 0 1rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+nav ul li:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+form {
+  background: var(--card-background);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+form h2 {
+  margin-top: 0;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: calc(100% - 2rem);
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+button {
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #ffb300;
+}
+
+.transactions ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transactions li {
+  background: var(--card-background);
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.transactions li:hover {
+  background-color: #1c1c2a;
+}
+
+.theme-switcher {
+  cursor: pointer;
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  transition: background-color 0.3s;
+}
+
+.theme-switcher:hover {
+  background-color: var(--accent-color);
+}
+
+.collapsible {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  cursor: pointer;
+  padding: 1rem;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.active, .collapsible:hover {
+  background-color: var(--accent-color);
+}
+
+.content {
+  padding: 0 1rem;
+  display: none;
+  overflow: hidden;
+  background-color: var(--card-background);
+  border-radius: 0 0 5px 5px;
+}
+
+.content.show {
+  display: block;
+}
