@@ -1,6 +1,5 @@
-// src/App.js
 import './fonts.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { GlobalStyle, lightTheme, darkTheme } from './themes';
 import Header from './components/Header';
@@ -13,6 +12,10 @@ import ThemeSwitcher from './components/ThemeSwitcher';
 import DatePickerModal from './components/DatePickerModal';
 import EditTransactionForm from './components/EditTransactionForm';
 import TotalBalance from './components/TotalBalance';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import { auth } from './firebase/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Container = styled.div`
   max-width: 1200px;
@@ -23,26 +26,34 @@ const Container = styled.div`
 
 const App = () => {
   const [transactions, setTransactions] = useState([]);
-  const [page, setPage] = useState('dashboard');
+  const [page, setPage] = useState('login');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [editIndex, setEditIndex] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setPage(currentUser ? 'dashboard' : 'login');
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const toggleTheme = () => setIsDarkMode(prevMode => !prevMode);
 
   const addExpense = (expense) => {
-    setTransactions([...transactions, { ...expense, type: 'expense' }]);
+    setTransactions(prevTransactions => [...prevTransactions, { ...expense, type: 'expense' }]);
   };
 
   const addIncome = (income) => {
-    setTransactions([...transactions, { ...income, type: 'income' }]);
+    setTransactions(prevTransactions => [...prevTransactions, { ...income, type: 'income' }]);
   };
 
   const handleEdit = (index) => {
@@ -51,11 +62,11 @@ const App = () => {
   };
 
   const handleDelete = (index) => {
-    setTransactions(transactions.filter((_, i) => i !== index));
+    setTransactions(prevTransactions => prevTransactions.filter((_, i) => i !== index));
   };
 
   const handleSaveEdit = (updatedTransaction) => {
-    setTransactions(transactions.map((transaction, index) =>
+    setTransactions(prevTransactions => prevTransactions.map((transaction, index) =>
       index === editIndex ? updatedTransaction : transaction
     ));
     setEditIndex(null);
@@ -68,12 +79,30 @@ const App = () => {
   };
 
   const calculateTotalBalance = () => {
-    return transactions.reduce((total, transaction) => {
-      return total + (transaction.type === 'income' ? transaction.amount : -transaction.amount);
-    }, 0).toFixed(2);
+    return transactions.reduce((total, transaction) => (
+      total + (transaction.type === 'income' ? transaction.amount : -transaction.amount)
+    ), 0).toFixed(2);
+  };
+
+  const handleLogin = (user) => {
+    setUser(user);
+    setPage('dashboard');
+  };
+
+  const handleLogout = () => {
+    auth.signOut().then(() => {
+      setUser(null);
+      setPage('login');
+    }).catch(error => {
+      console.error('Error signing out:', error);
+    });
   };
 
   const renderPage = () => {
+    if (!user) {
+      return page === 'login' ? <Login onLogin={handleLogin} setPage={setPage} /> : <Signup onSignup={handleLogin} />;
+    }
+
     switch (page) {
       case 'dashboard':
         return (
@@ -107,7 +136,7 @@ const App = () => {
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <GlobalStyle />
-      <Header setPage={setPage} />
+      {user && <Header setPage={setPage} user={user} onLogout={handleLogout} />}
       <ThemeSwitcher onToggle={toggleTheme} />
       <Container>
         {renderPage()}

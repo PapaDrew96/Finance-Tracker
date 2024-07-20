@@ -7,21 +7,25 @@ export const lightTheme = {
   backgroundColor: '#f4f4f9',
   textColor: '#000000',
   cardBackground: '#ffffff',
-  inputBackground: '#ffffff', // Light background for inputs
-  inputTextColor: '#000000',  // Dark text for inputs
+  inputBackground: '#ffffff',
+  inputTextColor: '#000000',
   textShadow: 'none', // No glow for light theme
+  balanceTextColor: '#4CAF50', // Green color for balance in light theme
+  balanceGlow: 'none' // No glow for light theme
 };
 
 export const darkTheme = {
   primaryColor: '#1E1E2F',
-  secondaryColor: '#ffffff', // White text color
+  secondaryColor: '#ffffff',
   accentColor: '#6272A4',
   backgroundColor: '#121212',
-  textColor: '#ffffff', // White text for dark theme
+  textColor: '#ffffff',
   cardBackground: '#1E1E2F',
-  inputBackground: '#2E2E3A', // Dark background for inputs
-  inputTextColor: '#ffffff',  // White text for inputs
+  inputBackground: '#2E2E3A',
+  inputTextColor: '#ffffff',
   textShadow: '0 0 5px #ffffff', // White glow effect
+  balanceTextColor: '#4CAF50', // Same green color for balance in dark theme
+  balanceGlow: '0 0 10px #4CAF50' // Green glow effect for dark theme
 };
 
 export const GlobalStyle = createGlobalStyle`
@@ -57,6 +61,7 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
   }
 
   nav ul li {
@@ -73,6 +78,8 @@ export const GlobalStyle = createGlobalStyle`
 
   .container {
     padding: 2rem;
+    max-width: 1200px; /* Constrain maximum width */
+    margin: auto; /* Center container */
   }
 
   form {
@@ -195,5 +202,99 @@ export const GlobalStyle = createGlobalStyle`
 
   .content.show {
     display: block;
+  }
+
+  .total-balance {
+    color: ${(props) => props.theme.balanceTextColor};
+    text-shadow: ${(props) => props.theme.balanceGlow}; /* Apply glowing effect for balance text */
+  }
+
+  /* Media Queries for Responsive Design */
+
+  @media (max-width: 1024px) {
+    .container {
+      padding: 1.5rem;
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+    }
+
+    button {
+      font-size: 0.9rem;
+      padding: 0.6rem 1.2rem;
+    }
+
+    .transactions li {
+      flex-direction: column;
+      padding: 0.8rem;
+    }
+
+    form {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    body {
+      font-size: 14px; /* Adjust font size for smaller screens */
+    }
+
+    .container {
+      padding: 1rem;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    button {
+      font-size: 0.8rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .transactions li {
+      flex-direction: column;
+      padding: 0.5rem;
+    }
+
+    form {
+      padding: 1rem;
+    }
+
+    nav ul {
+      flex-direction: column;
+    }
+
+    nav ul li {
+      margin: 0.5rem 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      font-size: 12px; /* Further reduce font size for very small screens */
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+    }
+
+    button {
+      font-size: 0.7rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .transactions li {
+      padding: 0.4rem;
+    }
+
+    .container {
+      padding: 0.5rem;
+    }
+
+    form {
+      padding: 0.5rem;
+    }
   }
 `;
