@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FormContainer, Button, Input } from './sharedStyles';
 
 const ExpenseForm = ({ onSubmit, onClose }) => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
     if (description && amount) {
       onSubmit({ description, amount: parseFloat(amount) });
@@ -13,7 +14,7 @@ const ExpenseForm = ({ onSubmit, onClose }) => {
       setAmount('');
       onClose();
     }
-  };
+  }, [description, amount, onSubmit, onClose]);
 
   return (
     <FormContainer>

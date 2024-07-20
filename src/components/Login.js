@@ -6,16 +6,22 @@ const Login = ({ onLogin, setPage }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading state
     const auth = getAuth();
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       onLogin({ name: user.email, email: user.email }); // Mock user object
     } catch (err) {
-      setError(err.message);
+      setError('Failed to sign in. Please check your email and password.');
+      console.error('Sign-in error:', err); // Log the detailed error
+    } finally {
+      setLoading(false); // End loading state
     }
   };
 
@@ -46,8 +52,13 @@ const Login = ({ onLogin, setPage }) => {
           </label>
         </div>
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <FormButton type="submit">Login</FormButton>
-        <p>Don't have an account? <FormButton type="button" onClick={() => setPage('signup')}>Sign Up</FormButton></p>
+        <FormButton type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </FormButton>
+        <p>
+          Don't have an account?{' '}
+          <FormButton type="button" onClick={() => setPage('signup')}>Sign Up</FormButton>
+        </p>
       </form>
     </FormWrapper>
   );

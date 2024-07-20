@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FormContainer, Button, Input } from './sharedStyles';
 import DatePickerModal from './DatePickerModal';
 
@@ -8,16 +8,23 @@ const IncomeForm = ({ onSubmit, onClose }) => {
   const [date, setDate] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
-    onSubmit({ name, amount: parseFloat(amount), date });
-    setName('');
-    setAmount('');
-    setDate(new Date());
-    if (onClose) {
-      onClose();  // Call onClose to close the form
+    if (name && amount) {
+      onSubmit({ name, amount: parseFloat(amount), date });
+      setName('');
+      setAmount('');
+      setDate(new Date());
+      onClose();
     }
-  };
+  }, [name, amount, date, onSubmit, onClose]);
+
+  // Handle date change
+  const handleDateChange = useCallback((newDate) => {
+    setDate(newDate);
+    setIsModalOpen(false);
+  }, []);
 
   return (
     <FormContainer>
@@ -66,10 +73,7 @@ const IncomeForm = ({ onSubmit, onClose }) => {
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         selectedDate={date}
-        onDateChange={(date) => {
-          setDate(date);
-          setIsModalOpen(false);
-        }}
+        onDateChange={handleDateChange}
       />
     </FormContainer>
   );
