@@ -3,9 +3,8 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAJ8Atyb_9ms8SfnmyQgsXrfo0jfE22a04",
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "finance-tracker-97408.firebaseapp.com",
   projectId: "finance-tracker-97408",
   storageBucket: "finance-tracker-97408.appspot.com",
@@ -16,8 +15,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Auth and Firestore
 const auth = getAuth(app);
 const db = getFirestore(app);
 
