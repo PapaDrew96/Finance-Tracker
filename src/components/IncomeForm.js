@@ -37,7 +37,7 @@ const Button = styled.button`
   }
 `;
 
-const IncomeForm = ({ addIncome }) => {
+const IncomeForm = ({ onSubmit }) => {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date());
@@ -45,7 +45,7 @@ const IncomeForm = ({ addIncome }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addIncome({ name, amount: parseFloat(amount), date });
+    onSubmit({ name, amount: parseFloat(amount), date });
     setName('');
     setAmount('');
     setDate(new Date());
